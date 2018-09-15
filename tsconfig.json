@@ -1,0 +1,19 @@
+{
+    "exclude": [
+        "node_modules"
+    ],
+    "include": [
+        "./src/**/*.ts"
+    ],
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "alwaysStrict": true,
+        "moduleResolution": "node",
+        "newLine": "CRLF",
+        "target": "es6",
+        "module": "commonjs",
+        "baseUrl": "./src/",
+        "sourceMap": true,
+        "skipLibCheck": true
+    }
+}
