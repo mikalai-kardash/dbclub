@@ -1,6 +1,8 @@
 const path = require('path');
 const fs = require('fs');
 const tslint = require('tslint-webpack-plugin');
+const hard = require('hard-source-webpack-plugin');
+const { CheckerPlugin } = require('awesome-typescript-loader');
 
 const nodeModules = {};
 fs.readdirSync('node_modules')
@@ -22,9 +24,23 @@ module.exports = {
     module: {
         rules: [
             {
-                use: 'awesome-typescript-loader',
                 test: /\.ts$/i,
-                exclude: /node_modules/
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'awesome-typescript-loader',
+                        options: {
+                            silent: true,
+                            // useBabel: true,
+                            // babelOptions: {
+                            //     compact: process.env.NODE_ENV === 'production',
+                            //     highlightCode: true,
+                            // },
+                            // babelCore: '@babel/core',
+                            useCache: true,
+                        },
+                    },
+                ],
             },
             {
                 use: [
@@ -48,6 +64,8 @@ module.exports = {
     plugins: [
         new tslint({
             files: './src/**/*.ts'
-        })
+        }),
+        new hard(),
+        new CheckerPlugin()
     ]
 } 
