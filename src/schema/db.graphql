@@ -1,7 +1,27 @@
-type Query {
-    data: Data
+enum Gender {
+    MALE
+    FEMALE
 }
 
-type Data {
+scalar Date
+
+type Salary {
+    salary: Int!
+    from: Date
+    to: Date
+    employee: Employee!
+}
+
+type Employee {
     id: ID!
+    firstName: String
+    lastName: String
+    gender: Gender
+    birthDate: Date
+    hireDate: Date!
+    salaries: [Salary!]!
+}
+
+type Query {
+    employee: Employee!
 }

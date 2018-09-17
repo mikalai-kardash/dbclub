@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --delay 1",
+    "start": "nodemon --delay 1 --watch dist --legacy-watch dist/index.js",
     "build": "webpack --mode production",
     "build:dev": "webpack --mode development",
     "dev:watch": "npm run build:dev -- -w -d --progress",

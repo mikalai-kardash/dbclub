@@ -21,7 +21,7 @@ services:
   api:
     image: bitnami/node
     volumes:
-      - ./:/app:ro
+      - ./:/app
     expose:
       - "4000"
     ports:
