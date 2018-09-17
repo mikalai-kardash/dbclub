@@ -22,6 +22,31 @@ type Employee {
     salaries: [Salary!]!
 }
 
+input EmployeeWhereInput {
+    AND: [EmployeeWhereInput!]
+    OR: [EmployeeWhereInput!]
+
+    id: ID
+    firstName: String
+    lastName: String
+    gender: Gender
+    birthDate: Date
+    hireDate: Date
+}
+
+input EmployeeOrderByInput {
+    id: Boolean
+    id_DESC: Boolean
+
+    firstName: Boolean
+    firstName_DESC: Boolean
+}
+
 type Query {
-    employee: Employee!
+    employee(
+        where: EmployeeWhereInput
+        orderBy: EmployeeOrderByInput
+        skip: Int
+        limit: Int
+    ): Employee!
 }

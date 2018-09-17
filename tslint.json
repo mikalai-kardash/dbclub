@@ -16,7 +16,12 @@
         "object-literal-sort-keys": false,
         "no-console": false,
         "no-unused-expression": true,
-        "interface-name": false
+        "interface-name": false,
+        "variable-name": false,
+        "arrow-parens": [
+            true,
+            "ban-single-arg-parens"
+        ]
     },
     "rulesDirectory": []
 }
