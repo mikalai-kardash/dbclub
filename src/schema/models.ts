@@ -2,6 +2,7 @@ export interface Employee {
     id: number
     firstName: string
     lastName: string
+    __typeName: 'Employee'
 }
 
 export interface EmployeeWhereInput {
