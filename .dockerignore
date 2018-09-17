@@ -1,0 +1,10 @@
+test_datadir
+node_modules
+dist
+
+.vscode
+.awcache
+.env
+.editorconfig
+
+yarn-error.log

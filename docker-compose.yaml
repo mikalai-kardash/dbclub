@@ -1,0 +1,38 @@
+version: '3.2'
+
+volumes:
+  dbdata:
+
+services:
+  db:
+    image: mysql:5.7
+    env_file: 
+      - ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=root-password
+    restart: always
+    expose: 
+      - "3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      dbclub:
+
+  api:
+    image: bitnami/node
+    volumes:
+      - ./:/app:ro
+    expose:
+      - "4000"
+    ports:
+      - "4000:4000"
+    links:
+      - db
+    depends_on:
+      - db
+    command: "npm start"
+    networks:
+      dbclub:
+
+networks:
+  dbclub:
