@@ -12,6 +12,12 @@ type Salary {
     employee: Employee!
 }
 
+type Title {
+    name: String
+    from: Date
+    to: Date
+}
+
 interface Worker {
     id: ID!
     firstName: String
@@ -19,6 +25,7 @@ interface Worker {
     gender: Gender
     birthDate: Date
     hireDate: Date!
+    title: Title!
 }
 
 type Employee implements Worker {
@@ -28,6 +35,7 @@ type Employee implements Worker {
     gender: Gender
     birthDate: Date
     hireDate: Date!
+    title: Title!
 }
 
 type Manager implements Worker {
@@ -39,12 +47,14 @@ type Manager implements Worker {
     hireDate: Date!
     from: Date
     to: Date
+    title: Title!
 }
 
 type Department {
     id: ID!
     name: String
     manager: Manager
+    employees: [Employee!]
 }
 
 input DepartmentWhereInput {

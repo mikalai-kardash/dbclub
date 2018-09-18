@@ -1,6 +1,7 @@
 import { ApolloServer } from 'apollo-server'
 import * as environment from 'dotenv'
 import Department from './resolvers/Department'
+import Manager from './resolvers/Manager'
 import Query from './resolvers/Query'
 import { definitions, kind } from './schema/db.graphql'
 
@@ -11,6 +12,7 @@ const server = new ApolloServer({
     resolvers: {
         Query,
         Department,
+        Manager,
     },
     context: ({ req }) => {
         return {

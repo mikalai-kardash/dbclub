@@ -7,6 +7,19 @@ const getEmployee = async (): Promise<Employee> => {
     return await queryData<Employee>(query, [], mapEmloyee)[0]
 }
 
+const getDepartmentEmployees = async (dept_no: number): Promise<Employee[]> => {
+    const query = `
+        SELECT * FROM employees es
+        INNER JOIN dept_emp de ON de.emp_no = es.emp_no
+        WHERE de.dept_no = ?
+        ORDER BY de.from_date DESC
+        LIMIT 128
+    `
+    const params = [dept_no]
+    return await queryData<Employee>(query, params, mapEmloyee)
+}
+
 export {
     getEmployee,
+    getDepartmentEmployees,
 }

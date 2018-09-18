@@ -1,7 +1,8 @@
 type TypeNames =
     'Employee' |
     'Department' |
-    'Manager'
+    'Manager' |
+    'Title'
 
 type Gender =
     'MALE' |
@@ -29,6 +30,13 @@ export interface Department extends SchemaType {
     id: number
     name?: string
     manager?: Employee
+}
+
+export interface Title extends SchemaType {
+    employeeId: number
+    name: string
+    from: Date
+    to: Date
 }
 
 export interface DepartmentWhereInput {

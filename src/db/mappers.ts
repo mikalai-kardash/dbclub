@@ -1,4 +1,4 @@
-import { Employee, Manager } from './models'
+import { Employee, Manager, Title } from './models'
 
 export const mapEmloyee = (record: any): Employee => {
     return {
@@ -17,5 +17,14 @@ export const mapManager = (record: any): Manager => {
         ...employee,
         from_date: new Date(record.from_date),
         to_date: new Date(record.to_date),
+    }
+}
+
+export const mapTitle = (record: any): Title => {
+    return {
+        emp_no: record.emp_no,
+        from_date: new Date(record.from_date),
+        to_date: new Date(record.to_date),
+        title: record.title,
     }
 }
