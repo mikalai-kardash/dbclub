@@ -1,5 +1,7 @@
+import { getDepartmentById } from '../db/department'
 import { getEmployee } from '../db/employee'
-import { Employee } from '../schema/models'
+import { Department, DepartmentWhereInput, Employee } from '../schema/models'
+import { mapDepartment, mapEmployees } from './mappers'
 
 const tableName = 'employees'
 const employeeFields = [
@@ -105,16 +107,18 @@ class EntityCache<T extends Entity> {
 }
 
 const resolveEmployee = async (_parent: any, _args: any, _context: any, _info: any): Promise<Employee> => {
-    console.log(JSON.stringify(_context, null, 2))
     const employee = await getEmployee()
-    return {
-        id: employee.emp_no,
-        firstName: employee.first_name,
-        lastName: employee.last_name,
-        __typeName: 'Employee',
-    }
+    return mapEmployees(employee)
+}
+
+const resolveDepartment = async (_parent: any, args: {
+    where?: DepartmentWhereInput,
+}): Promise<Department> => {
+    const [department] = await getDepartmentById(args.where.id)
+    return mapDepartment(department)
 }
 
 export default {
     employee: resolveEmployee,
+    department: resolveDepartment,
 }

@@ -15,6 +15,26 @@ const connect = () => {
     })
 }
 
+type Mapper<T> = (record: any) => T
+
+const queryData = async <T>(
+    query: string,
+    params: any[],
+    mapper: Mapper<T>,
+): Promise<T[]> => {
+    return new Promise<T[]>((resolve, reject) => {
+        connect().query(query, params, (err, records: any[]) => {
+            if (err) {
+                reject(err)
+                return
+            }
+            const mapped = records.map(mapper)
+            resolve(mapped)
+        })
+    })
+}
+
 export {
     connect as db,
+    queryData,
 }
