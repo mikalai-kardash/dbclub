@@ -9,7 +9,6 @@ type Salary {
     salary: Int!
     from: Date
     to: Date
-    employee: Employee!
 }
 
 type Title {
@@ -48,6 +47,7 @@ type Manager implements Worker {
     from: Date
     to: Date
     title: Title!
+    salary: Salary!
 }
 
 type Department {

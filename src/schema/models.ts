@@ -2,7 +2,8 @@ type TypeNames =
     'Employee' |
     'Department' |
     'Manager' |
-    'Title'
+    'Title' |
+    'Salary'
 
 type Gender =
     'MALE' |
@@ -35,6 +36,13 @@ export interface Department extends SchemaType {
 export interface Title extends SchemaType {
     employeeId: number
     name: string
+    from: Date
+    to: Date
+}
+
+export interface Salary extends SchemaType {
+    employeeId: number
+    salary: number
     from: Date
     to: Date
 }

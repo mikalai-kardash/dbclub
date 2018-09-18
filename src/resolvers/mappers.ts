@@ -2,12 +2,14 @@ import {
     Department as DataDepartment,
     Employee as DataEmployee,
     Manager as DataManager,
+    Salary as DataSalary,
     Title as DataTitle,
 } from '../db/models'
 import {
     Department as SchemaDepartment,
     Employee as SchemaEmployee,
     Manager as SchemaManager,
+    Salary as SchemaSalary,
     Title as SchemaTitle,
 } from '../schema/models'
 
@@ -49,5 +51,15 @@ export const mapTitle = (data: DataTitle): SchemaTitle => {
         from: data.from_date,
         to: data.to_date,
         __typeName: 'Title',
+    }
+}
+
+export const mapSalary = (data: DataSalary): SchemaSalary => {
+    return {
+        employeeId: data.emp_no,
+        salary: data.salary,
+        from: data.from_date,
+        to: data.to_date,
+        __typeName: 'Salary',
     }
 }
