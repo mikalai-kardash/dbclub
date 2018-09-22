@@ -8,16 +8,21 @@
     "build": "webpack --mode production",
     "build:dev": "webpack --mode development",
     "dev:watch": "npm run build:dev -- -w -d --progress",
-    "watch": "concurrently \"npm:dev:watch\" \"npm:start\""
+    "watch": "concurrently \"npm:dev:watch\" \"npm:start\"",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "devDependencies": {
     "@types/dotenv": "^4.0.3",
+    "@types/jest": "^23.3.2",
     "@types/mysql": "^2.15.5",
     "@types/node": "^10.9.4",
     "awesome-typescript-loader": "^5.2.1",
     "concurrently": "^4.0.1",
     "hard-source-webpack-plugin": "^0.12.0",
+    "jest": "^23.6.0",
     "nodemon": "^1.18.4",
+    "ts-jest": "^23.10.1",
     "tslint": "^5.11.0",
     "tslint-webpack-plugin": "^1.2.2",
     "typescript": "^3.0.3",
