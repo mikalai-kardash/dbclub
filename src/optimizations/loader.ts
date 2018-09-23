@@ -49,18 +49,49 @@ export class Loader<K, V> {
         })
     }
 
+    private async executeLoader(keys: K[]): Promise<{
+        error?: Error,
+        result?: V[],
+    }> {
+        try {
+            const result = await this.loader(keys)
+            return { result }
+        } catch (error) {
+            return { error }
+        }
+    }
+
     private async loadValues(): Promise<void> {
         const work = this.batch.get()
-        const values = await this.loader(work.keys)
+        const { error, result } = await this.executeLoader(work.keys)
 
         work.items.forEach(({ key, reject, resolve }) => {
-            const value = values.find(v => this.match(key, v))
+            const matchItem = (v: V) => {
+                try {
+                    return this.match(key, v)
+                } catch (e) {
+                    return false
+                }
+            }
+
+            if (error) {
+                reject(error)
+                return
+            }
+
+            const value = result.find(matchItem)
+
+            if (!value) {
+                reject(new Error('No match.'))
+                return
+            }
 
             if (value instanceof Error) {
                 reject(value)
-            } else {
-                resolve(value)
+                return
             }
+
+            resolve(value)
         })
     }
 }
