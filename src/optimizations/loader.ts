@@ -26,6 +26,10 @@ export class Loader<K, V> {
     }
 
     public load(id: K): Promise<V> {
+        if (!id) {
+            throw new Error('Undefined or null: id.')
+        }
+
         return new Promise<V>((resolve, reject) => {
             this.batch.add({ key: id, resolve, reject })
 

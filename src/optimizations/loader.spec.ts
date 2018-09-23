@@ -109,6 +109,11 @@ describe('Loader', () => {
         expect(v3.id).toBe(3)
         expect(v4.id).toBe(4)
     })
+
+    describe('throws', () => {
+        it('id === null', () => expect(() => dataLoader.load(null)).toThrow())
+        it('id === undefined', () => expect(() => dataLoader.load(undefined)).toThrow())
+    })
 })
 
 describe('Loader, when loader throws', () => {
