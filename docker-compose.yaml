@@ -3,6 +3,9 @@ version: '3.2'
 volumes:
   dbdata:
 
+networks:
+  dbclub:
+
 services:
   db:
     image: mysql:5.7
@@ -33,6 +36,3 @@ services:
     command: "npm start"
     networks:
       dbclub:
-
-networks:
-  dbclub:
