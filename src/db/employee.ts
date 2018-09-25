@@ -19,7 +19,14 @@ const getDepartmentEmployees = async (dept_no: number): Promise<Employee[]> => {
     return await queryData<Employee>(query, params, mapEmloyee)
 }
 
+const getEmployeeByIds = async (ids: number[]): Promise<Employee[]> => {
+    const list = ids.map(_ => '?').join(', ')
+    const query = `SELECT * FROM employees WHERE id IN [${list}]`
+    return await queryData<Employee>(query, ids, mapEmloyee)
+}
+
 export {
     getEmployee,
     getDepartmentEmployees,
+    getEmployeeByIds,
 }
