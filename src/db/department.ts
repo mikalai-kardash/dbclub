@@ -18,7 +18,13 @@ const getDepartmentById = async (dept_no: number): Promise<Department[]> => {
     return await queryDepartments(query, params)
 }
 
+const getDepartments = async (): Promise<Department[]> => {
+    const query = 'SELECT * FROM departments LIMIT 0, 128'
+    return await queryDepartments(query, [])
+}
+
 export {
     getDepartmentById,
     queryDepartments,
+    getDepartments,
 }
