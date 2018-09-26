@@ -6,6 +6,7 @@ import {
     FilterIn,
     FilterNotNull,
     FilterNull,
+    OrderByInput,
     WhereInput,
     WhereInputAnd,
     WhereInputFields,
@@ -248,4 +249,42 @@ export const parse = (condition: ConditionType | undefined): Where | undefined =
 
     const [result] = pending
     return result
+}
+
+interface OrderBy {
+    query: string
+}
+
+export const order = <T, K extends keyof T>(orderBy: OrderByInput<T> | undefined, fields: K[]): OrderBy | undefined => {
+    if (!orderBy) {
+        return undefined
+    }
+
+    const query: string[] = []
+
+    for (const field of fields) {
+        const ordered = orderBy[field]
+
+        if (ordered === undefined) {
+            continue
+        }
+
+        query.push(`${field} ${ordered ? 'ASC' : 'DESC'}`)
+    }
+
+    if (query.length > 0) {
+        return {
+            query: query.join(', '),
+        }
+    }
+
+    return undefined
+}
+
+export class QueryBuilder<T, K extends keyof T> {
+    constructor(private fields: K[]) { }
+
+    public where(where: WhereInput<T>): Where | undefined {
+        return parse(traverse(where, this.fields))
+    }
 }

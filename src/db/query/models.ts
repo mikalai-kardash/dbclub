@@ -45,18 +45,6 @@ export type Query<T> = Partial<{
     limit: number,
 }>
 
-export interface ConditionVisitor {
-    visit(condition: ConditionType)
-
-    analyze(condition: Condition)
-    analyzeAnd(condition: AndCondition)
-    analyzeOr(condition: OrCondition)
-}
-
-export interface ConditionVisitable {
-    accept(visitor: ConditionVisitor)
-}
-
 export interface Condition {
     kind: 'filter'
     query: string

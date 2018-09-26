@@ -1,4 +1,4 @@
-import { parse, traverse } from './builder'
+import { order, parse, traverse } from './builder'
 import { AndCondition, Condition, ConditionType, OrCondition } from './models'
 
 const expectFilter = (condition: ConditionType): condition is Condition => {
@@ -129,4 +129,23 @@ describe('Parser', () => {
         expect(parsed.query).toBe('(id = ? AND flag = ?) OR id2 = ?')
         expect(parsed.params).toEqual([1, true, 2])
     })
+})
+
+describe('Ordering', () => {
+
+    it('id ASC', () => {
+        const orderBy = order({ id: true }, ['id'])
+        expect(orderBy.query).toBe('id ASC')
+    })
+
+    it('id DESC', () => {
+        const orderBy = order({ id: false }, ['id'])
+        expect(orderBy.query).toBe('id DESC')
+    })
+
+    it('id ASC, flag DESC', () => {
+        const orderBy = order({ id: true, flag: false }, ['id', 'flag'])
+        expect(orderBy.query).toBe('id ASC, flag DESC')
+    })
+
 })
