@@ -142,7 +142,7 @@ export const traverse = <T, K extends keyof T>(where: WhereInput<T>, fieldNames:
     }
 
     if (pending.length > 1) {
-        throw new Error(`Parsing error. Unprocessed filters left (${pending.length}).`)
+        throw new Error(`Traversal error. Unprocessed filters left (${pending.length}).`)
     }
 
     if (pending.length === 1) {
@@ -158,32 +158,94 @@ interface Where {
     params: FieldType[]
 }
 
-const parse = (condition: ConditionType | undefined): Where | undefined => {
+const reduceResults = (results: Where[], plus: 'AND' | 'OR'): Where => {
+    if (!results || results.length === 0) {
+        return undefined
+    }
+
+    const [first, ...rest] = results.reverse()
+
+    if (!rest) {
+        return first
+    }
+
+    const shouldWrap = (s: string): boolean => /\sAND|OR\s/.test(s)
+    const wrap = (s: string) => shouldWrap(s) ? `(${s})` : s
+
+    return rest.reduce((current, prev) => {
+        const left = wrap(prev.query)
+        const right = wrap(current.query)
+
+        return {
+            query: `${left} ${plus} ${right}`,
+            params: [
+                ...prev.params,
+                ...current.params,
+            ],
+        }
+    }, first)
+}
+
+export const parse = (condition: ConditionType | undefined): Where | undefined => {
     if (!condition) {
         return undefined
     }
 
     type ProcessingType = 'and' | 'or'
     const processing: Array<ProcessingType | ConditionType> = [condition]
-    const params: FieldType[] = []
+    let pending: Where[] = []
+    let cycles = 0
 
     while (processing.length > 0) {
+        if (cycles > 200) {
+            throw new Error('Infinite loop detected.')
+        }
+
+        cycles++
         const next = processing.pop()
 
         if (typeof next === 'string') {
+
+            switch (next) {
+                case 'and':
+                    pending = [reduceResults(pending, 'AND')]
+                    break
+
+                case 'or':
+                    pending = [reduceResults(pending, 'OR')]
+                    break
+
+                default: throw new Error(`Unknown logical exppression: ${next}.`)
+            }
+
+            pending = pending.filter(p => p)
             continue
         }
 
         switch (next.kind) {
             case 'and':
-                processing.push('and', ...next.and)
+                processing.push('and', ...next.and.reverse())
                 break
 
             case 'or':
-                processing.push('or', ...next.or)
+                processing.push('or', ...next.or.reverse())
                 break
 
+            case 'filter':
+                const { params, query } = next
+                pending.push({ query, params })
+                break
         }
-
     }
+
+    if (pending.length === 0) {
+        return undefined
+    }
+
+    if (pending.length > 1) {
+        throw new Error(`Parsing error. Unprocessed conditions left: ${pending.length}`)
+    }
+
+    const [result] = pending
+    return result
 }

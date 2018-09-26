@@ -57,18 +57,18 @@ export interface ConditionVisitable {
     accept(visitor: ConditionVisitor)
 }
 
-export interface Condition extends ConditionVisitable {
+export interface Condition {
     kind: 'filter'
     query: string
     params: FieldType[]
 }
 
-export interface OrCondition extends ConditionVisitable {
+export interface OrCondition {
     kind: 'or'
     or: ConditionType[]
 }
 
-export interface AndCondition extends ConditionVisitable {
+export interface AndCondition {
     kind: 'and'
     and: ConditionType[]
 }
