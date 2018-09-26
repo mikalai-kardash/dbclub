@@ -86,14 +86,5 @@ input EmployeeOrderByInput {
 }
 
 type Query {
-    employee(
-        where: EmployeeWhereInput
-        orderBy: EmployeeOrderByInput
-        skip: Int
-        limit: Int
-    ): Employee!
-
-    department(
-        where: DepartmentWhereInput
-    ): Department!
+    departments: [Department!]!
 }

@@ -2,7 +2,6 @@ import {
     AndCondition as And,
     Condition as Filter,
     ConditionType,
-    ConditionVisitor,
     FieldType,
     OrCondition as Or,
 } from './models'
@@ -16,10 +15,6 @@ export class Condition implements Filter {
     ) {
         this.kind = 'filter'
     }
-
-    public accept(visitor: ConditionVisitor) {
-        // ?
-    }
 }
 
 export class OrCondition implements Or {
@@ -30,10 +25,6 @@ export class OrCondition implements Or {
     ) {
         this.kind = 'or'
     }
-
-    public accept(visitor: ConditionVisitor) {
-        // ?
-    }
 }
 
 export class AndCondition implements And {
@@ -43,9 +34,5 @@ export class AndCondition implements And {
         public and: ConditionType[],
     ) {
         this.kind = 'and'
-    }
-
-    public accept(visitor: ConditionVisitor) {
-        // ?
     }
 }

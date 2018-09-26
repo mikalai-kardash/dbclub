@@ -2,6 +2,7 @@ import { getDepartmentById } from '../db/department'
 import { getEmployee } from '../db/employee'
 import { Department, DepartmentWhereInput, Employee } from '../schema/models'
 import { mapDepartment, mapEmployees } from './mappers'
+import { Context } from 'server';
 
 const tableName = 'employees'
 const employeeFields = [
@@ -118,7 +119,13 @@ const resolveDepartment = async (_parent: any, args: {
     return mapDepartment(department)
 }
 
+const resolveDepartments = async (_: any, _args: any, context: Context): Promise<Department[]> => {
+    const departments = await context.api.departments.getAll()
+    return departments.map(mapDepartment)
+}
+
 export default {
-    employee: resolveEmployee,
-    department: resolveDepartment,
+    // employee: resolveEmployee,
+    // department: resolveDepartment,
+    departments: resolveDepartments,
 }

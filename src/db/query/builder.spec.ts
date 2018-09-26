@@ -1,4 +1,4 @@
-import { order, parse, traverse, limit } from './builder'
+import { limit, order, parse, traverse } from './builder'
 import { AndCondition, Condition, ConditionType, OrCondition } from './models'
 
 const expectFilter = (condition: ConditionType): condition is Condition => {
