@@ -8,6 +8,7 @@ export const mapEmloyee = (record: any): Employee => {
         birth_date: new Date(record.birth_date),
         gender: record.gender,
         hire_date: new Date(record.hire_date),
+        dept_no: record.dept_no,
     }
 }
 

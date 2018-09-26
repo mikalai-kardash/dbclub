@@ -27,12 +27,26 @@ services:
       - ./:/app
     expose:
       - "4000"
-    ports:
-      - "4000:4000"
     links:
       - db
     depends_on:
       - db
     command: "npm start"
+    networks:
+      dbclub:
+
+  web:
+    image: bitnami/nginx
+    volumes:
+      - ./deployment/web/api_vhost.conf:/opt/bitnami/nginx/conf/vhosts/api_vhost.conf:ro
+    depends_on:
+      - api
+    links:
+      - api:api
+    expose:
+      - 8081
+    ports:
+      - 4000:8081
+    restart: always
     networks:
       dbclub:

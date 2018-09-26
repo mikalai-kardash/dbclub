@@ -5,6 +5,7 @@ export interface Employee {
     birth_date?: Date
     gender?: 'M' | 'F'
     hire_date?: Date
+    dept_no?: number
 }
 
 export interface Manager extends Employee {

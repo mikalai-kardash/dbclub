@@ -4,13 +4,29 @@ Param(
     [switch]$init,
 
     [Parameter(Mandatory = $false)]
-    [switch]$stop
+    [switch]$stop,
+
+    [Parameter(Mandatory = $false)]
+    [switch]$restart,
+
+    [Parameter(Mandatory = $false)]
+    [switch]$build
 )
 
 $base = Get-Location | Split-Path -Leaf
 $root = (Get-Location).Path
 
 if ($stop -eq $false) {
+
+    if ($restart -eq $true) {
+        docker-compose down
+    }
+
+    if ($build -eq $true) {
+        docker-compose rm
+        docker-compose build
+    }
+
     docker-compose up -d
 }
 else {
