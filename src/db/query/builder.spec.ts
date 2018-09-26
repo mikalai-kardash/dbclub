@@ -1,4 +1,4 @@
-import { order, parse, traverse } from './builder'
+import { order, parse, traverse, limit } from './builder'
 import { AndCondition, Condition, ConditionType, OrCondition } from './models'
 
 const expectFilter = (condition: ConditionType): condition is Condition => {
@@ -146,6 +146,25 @@ describe('Ordering', () => {
     it('id ASC, flag DESC', () => {
         const orderBy = order({ id: true, flag: false }, ['id', 'flag'])
         expect(orderBy.query).toBe('id ASC, flag DESC')
+    })
+
+})
+
+describe('Paging', () => {
+
+    it('128', () => {
+        const page = limit({
+            limit: 128,
+        })
+        expect(page.query).toBe('128')
+    })
+
+    it('256, 128', () => {
+        const page = limit({
+            offset: 256,
+            limit: 128,
+        })
+        expect(page.query).toBe('256, 128')
     })
 
 })

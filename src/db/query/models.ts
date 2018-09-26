@@ -45,6 +45,8 @@ export type Query<T> = Partial<{
     limit: number,
 }>
 
+export type SimplePaging<T> = Pick<Query<T>, 'limit' | 'offset'>
+
 export interface Condition {
     kind: 'filter'
     query: string

@@ -7,6 +7,7 @@ import {
     FilterNotNull,
     FilterNull,
     OrderByInput,
+    SimplePaging,
     WhereInput,
     WhereInputAnd,
     WhereInputFields,
@@ -281,10 +282,38 @@ export const order = <T, K extends keyof T>(orderBy: OrderByInput<T> | undefined
     return undefined
 }
 
+interface Limit {
+    query: string
+}
+
+export const limit = <T>(page: SimplePaging<T> | undefined): Limit | undefined => {
+    if (!page) {
+        return undefined
+    }
+
+    if (!page.limit) {
+        return undefined
+    }
+
+    const query = page.offset
+        ? `${page.offset}, ${page.limit}`
+        : `${page.limit}`
+
+    return { query }
+}
+
 export class QueryBuilder<T, K extends keyof T> {
     constructor(private fields: K[]) { }
 
     public where(where: WhereInput<T>): Where | undefined {
         return parse(traverse(where, this.fields))
+    }
+
+    public order(orderBy: OrderByInput<T>): OrderBy | undefined {
+        return order(orderBy, this.fields)
+    }
+
+    public limit(paging: SimplePaging<T>): Limit | undefined {
+        return limit(paging)
     }
 }
