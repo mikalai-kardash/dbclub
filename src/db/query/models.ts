@@ -1,49 +1,49 @@
-type FieldType = string | number | boolean | Date
+export type FieldType = string | number | boolean | Date
 
-interface FilterNull {
+export interface FilterNull {
     null: true
 }
 
-interface FilterNotNull {
+export interface FilterNotNull {
     not_null: true
 }
 
-interface FilterIn<T> {
-    in: T[]
+export interface FilterIn {
+    in: FieldType[]
 }
 
-type Filter<T> =
-    FilterIn<T> |
+export type Filter =
+    FilterIn |
     FilterNotNull |
     FilterNull
 
-type WhereInputFields<T> = {
-    [K in keyof T]?: T[K] | Filter<T[K]>
+export type WhereInputFields<T> = {
+    [K in keyof T]?: T[K] | Filter
 }
 
-interface WhereInputAnd<T> {
+export interface WhereInputAnd<T> {
     and: Array<WhereInput<T>>
 }
 
-interface WhereInputOr<T> {
+export interface WhereInputOr<T> {
     or: Array<WhereInput<T>>
 }
 
-type WhereInput<T> =
+export type WhereInput<T> =
     WhereInputAnd<T> |
     WhereInputOr<T> |
     WhereInputFields<T>
 
-type OrderByInput<T> = {
-    [K in keyof T]?: boolean
-}
+export type OrderByInput<T> = Partial<{
+    [K in keyof T]: boolean
+}>
 
-export interface Query<T> {
-    where?: WhereInput<T>
-    orderBy?: OrderByInput<T>
-    offset?: number
-    limit?: number
-}
+export type Query<T> = Partial<{
+    where: WhereInput<T>,
+    orderBy: OrderByInput<T>,
+    offset: number,
+    limit: number,
+}>
 
 export interface ConditionVisitor {
     visit(condition: ConditionType)
@@ -73,7 +73,7 @@ export interface AndCondition extends ConditionVisitable {
     and: ConditionType[]
 }
 
-type ConditionType =
+export type ConditionType =
     Condition |
     OrCondition |
     AndCondition
