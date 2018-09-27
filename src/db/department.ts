@@ -43,8 +43,6 @@ const getDepartments = async (filter: Query<DepartmentSchema>): Promise<Departme
         WHERE ${where.query}`
     }
 
-    console.log(query)
-
     return await queryDepartments(query, [...where.params])
 }
 
