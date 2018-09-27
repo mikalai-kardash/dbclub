@@ -4,7 +4,6 @@ import { Manager, Salary, Title } from '../schema/models'
 import { mapSalary, mapTitle } from './mappers'
 
 const resolveTitle = async (parent: Manager): Promise<Title> => {
-    console.log(parent.to)
     const [title] = await getEmployeeTitle(parent.id)
     return mapTitle(title)
 }

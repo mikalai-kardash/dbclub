@@ -22,7 +22,6 @@ const getEmployeesTitle = async (ids: number[]): Promise<Title[]> => {
           AND emp_no IN (${qs})
     `
     const titles = await queryData(query, params, mapTitle)
-    console.log(`Received ${titles.length} titles`)
     return titles
 }
 

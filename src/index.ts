@@ -2,6 +2,7 @@ import { ApolloServer } from 'apollo-server'
 import * as environment from 'dotenv'
 import { DepartmentApi } from './api/department'
 import { EmployeeApi } from './api/employee'
+import { SalaryApi } from './api/salary'
 import { TitleApi } from './api/title'
 import { DefaultCache } from './optimizations/cache'
 import { Memory } from './optimizations/memory'
@@ -30,12 +31,14 @@ const server = new ApolloServer({
         const departments = new DepartmentApi(memory)
         const employees = new EmployeeApi(memory)
         const titles = new TitleApi(memory)
+        const salaries = new SalaryApi(memory)
 
         return {
             api: {
                 departments,
                 employees,
                 titles,
+                salaries,
             },
             cache: {
                 data,

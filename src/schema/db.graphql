@@ -23,6 +23,7 @@ type Employee implements Worker {
     birthDate: Date
     hireDate: Date!
     title: String
+    salary: Float
 }
 
 type Manager implements Worker {

@@ -9,12 +9,10 @@ class CacheStub implements Cache {
     private cache = new Map()
 
     public get<V>(key: any): V {
-        console.log(`get ${key}`)
         return this.cache.get(key)
     }
 
     public set<V>(key: any, value: V) {
-        console.log(`set ${key} = ${value}`)
         this.cache.set(key, value)
     }
 
