@@ -1,5 +1,5 @@
 import { limit, order, parse, traverse } from './builder'
-import { AndCondition, Condition, ConditionType, OrCondition, FieldNameMap } from './models'
+import { AndCondition, Condition, ConditionType, FieldNameMap, OrCondition } from './models'
 
 const expectFilter = (condition: ConditionType): condition is Condition => {
     expect(condition.kind).toBe('filter')
