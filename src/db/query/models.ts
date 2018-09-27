@@ -12,13 +12,18 @@ export interface FilterIn {
     in: FieldType[]
 }
 
+export interface FilterEq {
+    eq: FieldType
+}
+
 export type Filter =
+    FilterEq |
     FilterIn |
     FilterNotNull |
     FilterNull
 
 export type WhereInputFields<T> = {
-    [K in keyof T]?: T[K] | Filter
+    [K in keyof T]?: Filter
 }
 
 export interface WhereInputAnd<T> {
@@ -67,3 +72,11 @@ export type ConditionType =
     Condition |
     OrCondition |
     AndCondition
+
+export type FieldNameMap<T, U> = Partial<Readonly<{
+    [P in keyof T]: keyof U
+}>>
+
+export type PropertyMap = Partial<Readonly<{
+    [name: string]: string,
+}>>

@@ -1,12 +1,15 @@
 import { AndCondition, Condition, OrCondition } from './conditions'
 import {
     ConditionType,
+    FieldNameMap,
     FieldType,
     Filter,
+    FilterEq,
     FilterIn,
     FilterNotNull,
     FilterNull,
     OrderByInput,
+    PropertyMap,
     SimplePaging,
     WhereInput,
     WhereInputAnd,
@@ -30,15 +33,12 @@ const isFields = <T>(where: WhereInput<T>): where is WhereInputFields<T> => {
     return !isAnd(where) && !isOr(where)
 }
 
-const isFieldType = (value: any): value is FieldType => {
-    return typeof value === 'string'
-        || typeof value === 'number'
-        || typeof value === 'boolean'
-        || value instanceof Date
-}
-
 const isFilterIn = <T>(value: Filter | T): value is FilterIn => {
     return (value as FilterIn).in !== undefined
+}
+
+const isFilterEq = <T>(value: Filter | T): value is FilterEq => {
+    return (value as FilterEq).eq !== undefined
 }
 
 const isFilterNull = <T>(value: Filter | T): value is FilterNull => {
@@ -49,13 +49,11 @@ const isFilterNotNull = <T>(value: Filter | T): value is FilterNotNull => {
     return (value as FilterNotNull).not_null !== undefined
 }
 
-const isType = <T>(value: Filter | T): value is T => {
-    return !isFilterIn(value)
-        && !isFilterNotNull(value)
-        && !isFilterNull(value)
-}
-
-const createFilter = <T, F extends keyof T>(fields: WhereInputFields<T>, fieldNames: F[]): Condition => {
+const createFilter = <T, F extends keyof T>(
+    fields: WhereInputFields<T>,
+    fieldNames: F[],
+    map: PropertyMap = {},
+): Condition => {
     for (const name of fieldNames) {
         const value = fields[name]
 
@@ -63,31 +61,36 @@ const createFilter = <T, F extends keyof T>(fields: WhereInputFields<T>, fieldNa
             continue
         }
 
+        const actualName = map[name as string] || name
+
         if (isFilterNull(value)) {
-            return new Condition(`${name} IS NULL`, [])
+            return new Condition(`${actualName} IS NULL`, [])
         }
 
         if (isFilterNotNull(value)) {
-            return new Condition(`${name} IS NOT NULL`, [])
+            return new Condition(`${actualName} IS NOT NULL`, [])
         }
 
         if (isFilterIn(value)) {
             const values = value.in
-            return new Condition(`${name} IN [${values.map(_ => '?').join(', ')}]`, [
+            return new Condition(`${actualName} IN (${values.map(_ => '?').join(', ')})`, [
                 ...values as FieldType[],
             ])
         }
 
-        if (isType(value)) {
-            if (isFieldType(value)) {
-                return new Condition(`${name} = ?`, [value])
-            }
-            continue
+        if (isFilterEq(value)) {
+            return new Condition(`${actualName} = ?`, [value.eq])
         }
+
+        continue
     }
 }
 
-export const traverse = <T, K extends keyof T>(where: WhereInput<T>, fieldNames: K[]): ConditionType | undefined => {
+export const traverse = <T, K extends keyof T>(
+    where: WhereInput<T>,
+    fieldNames: K[],
+    map: PropertyMap = {},
+): ConditionType | undefined => {
     if (!where) {
         return undefined
     }
@@ -138,7 +141,7 @@ export const traverse = <T, K extends keyof T>(where: WhereInput<T>, fieldNames:
 
         if (isFields(next)) {
             pending.push(
-                createFilter(next, fieldNames),
+                createFilter(next, fieldNames, map),
             )
         }
     }
@@ -302,11 +305,14 @@ export const limit = <T>(page: SimplePaging<T> | undefined): Limit | undefined =
     return { query }
 }
 
-export class QueryBuilder<T, K extends keyof T> {
-    constructor(private fields: K[]) { }
+export class QueryBuilder<T> {
+    constructor(
+        private fields: Array<keyof T>,
+        private map: PropertyMap = {},
+    ) { }
 
     public where(where: WhereInput<T>): Where | undefined {
-        return parse(traverse(where, this.fields))
+        return parse(traverse(where, this.fields, this.map))
     }
 
     public order(orderBy: OrderByInput<T>): OrderBy | undefined {

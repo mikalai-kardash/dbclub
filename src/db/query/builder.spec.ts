@@ -1,5 +1,5 @@
 import { limit, order, parse, traverse } from './builder'
-import { AndCondition, Condition, ConditionType, OrCondition } from './models'
+import { AndCondition, Condition, ConditionType, OrCondition, FieldNameMap } from './models'
 
 const expectFilter = (condition: ConditionType): condition is Condition => {
     expect(condition.kind).toBe('filter')
@@ -21,7 +21,7 @@ describe('Traversal', () => {
     describe('field filter conditions', () => {
 
         it('id = ?', () => {
-            const condition = traverse({ id: 1 }, ['id'])
+            const condition = traverse({ id: { eq: 1 } }, ['id'])
             if (expectFilter(condition)) {
                 expect(condition.query).toBe('id = ?')
                 expect(condition.params).toEqual([1])
@@ -29,10 +29,18 @@ describe('Traversal', () => {
         })
 
         it('flag = ?', () => {
-            const condition = traverse({ flag: true }, ['flag'])
+            const condition = traverse({ flag: { eq: true } }, ['flag'])
             if (expectFilter(condition)) {
                 expect(condition.query).toBe('flag = ?')
                 expect(condition.params).toEqual([true])
+            }
+        })
+
+        it('alias', () => {
+            const map: FieldNameMap<{ id: number }, { alias: number }> = { id: 'alias' }
+            const condition = traverse({ id: { eq: 1 } }, ['id'], map)
+            if (expectFilter(condition)) {
+                expect(condition.query).toBe('alias = ?')
             }
         })
 
@@ -43,8 +51,8 @@ describe('Traversal', () => {
         it('and', () => {
             const condition = traverse({
                 and: [
-                    { id: 1 },
-                    { id: 2 },
+                    { id: { eq: 1 } },
+                    { id: { eq: 2 } },
                 ],
             }, ['id'])
 
@@ -54,8 +62,8 @@ describe('Traversal', () => {
         it('or', () => {
             const condition = traverse({
                 or: [
-                    { id: 1 },
-                    { id: 2 },
+                    { id: { eq: 1 } },
+                    { id: { eq: 2 } },
                 ],
             }, ['id'])
 

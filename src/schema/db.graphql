@@ -5,17 +5,24 @@ enum Gender {
 
 scalar Date
 
-interface Worker {
-    id: ID!
-    firstName: String
-    lastName: String
-    gender: Gender
-    birthDate: Date
-    hireDate: Date!
-    title: String
+input FilterIdInput {
+    eq: ID
+    in: [ID!]
 }
 
-type Employee implements Worker {
+input FilterIntInput {
+    eq: Int
+    in: [Int!]
+    null: Boolean
+    not_null: Boolean
+}
+
+type FilterString {
+    eq: String
+    like: String
+}
+
+type Employee {
     id: ID!
     firstName: String
     lastName: String
@@ -26,7 +33,7 @@ type Employee implements Worker {
     salary: Float
 }
 
-type Manager implements Worker {
+type Manager {
     id: ID!
     firstName: String
     lastName: String
@@ -39,6 +46,10 @@ type Manager implements Worker {
     salary: Float
 }
 
+input DepartmentWhereInput {
+    id: FilterIdInput
+}
+
 type Department {
     id: ID!
     name: String
@@ -46,34 +57,8 @@ type Department {
     employees: [Employee!]
 }
 
-input DepartmentWhereInput {
-    AND: [DepartmentWhereInput!]
-    OR: [DepartmentWhereInput!]
-
-    id: ID
-    name: String
-}
-
-input EmployeeWhereInput {
-    AND: [EmployeeWhereInput!]
-    OR: [EmployeeWhereInput!]
-
-    id: ID
-    firstName: String
-    lastName: String
-    gender: Gender
-    birthDate: Date
-    hireDate: Date
-}
-
-input EmployeeOrderByInput {
-    id: Boolean
-    id_DESC: Boolean
-
-    firstName: Boolean
-    firstName_DESC: Boolean
-}
-
 type Query {
-    departments: [Department!]!
+    departments(
+        where: DepartmentWhereInput
+    ): [Department!]!
 }
