@@ -16,6 +16,8 @@ services:
     restart: always
     expose: 
       - "3306"
+    ports:
+      - "4306:3306"
     volumes:
       - dbdata:/var/lib/mysql
     networks:

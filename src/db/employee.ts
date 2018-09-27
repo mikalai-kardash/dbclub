@@ -53,11 +53,12 @@ const groupBy = <T, K extends keyof T>(arr: T[], key: K): Array<{ id: T[K], arr:
 const getDepartmentsEmployees = async (ids: number[]): Promise<EmployeeList[]> => {
     const params = [...ids]
     const query = `
-        SELECT *, de.dept_no
+        SELECT *
         FROM employees es
         INNER JOIN dept_emp de ON de.emp_no = es.emp_no
-        WHERE de.to_date = '9999-01-01'
+        WHERE de.to_date = DATE('9999-01-01')
           AND de.dept_no IN (${ids.map(_ => '?').join(', ')})
+        LIMIT 256
     `
     const employees = await queryData(query, params, mapEmloyee)
     const grouped = groupBy(employees, 'dept_no')

@@ -6,6 +6,7 @@ import { TitleApi } from './api/title'
 import { DefaultCache } from './optimizations/cache'
 import { Memory } from './optimizations/memory'
 import Department from './resolvers/Department'
+import Employee from './resolvers/Employee'
 import Manager from './resolvers/Manager'
 import Query from './resolvers/Query'
 import { definitions, kind } from './schema/db.graphql'
@@ -18,6 +19,7 @@ const server = new ApolloServer({
     resolvers: {
         Query,
         Department,
+        Employee,
         Manager,
     },
     context: () => {

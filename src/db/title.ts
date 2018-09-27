@@ -15,10 +15,11 @@ const getEmployeeTitle = async (emp_no: number): Promise<Title[]> => {
 
 const getEmployeesTitle = async (ids: number[]): Promise<Title[]> => {
     const params = [...ids]
+    const qs = ids.map(_ => '?').join(', ')
     const query = `
         SELECT * FROM titles
-        WHERE to_date = '9999-01-01'
-          AND emp_no IN (${ids.map(_ => '?').join(', ')})
+        WHERE to_date = DATE('9999-01-01')
+          AND emp_no IN (${qs})
     `
     const titles = await queryData(query, params, mapTitle)
     console.log(`Received ${titles.length} titles`)
