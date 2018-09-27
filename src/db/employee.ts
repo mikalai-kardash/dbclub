@@ -53,11 +53,11 @@ const groupBy = <T, K extends keyof T>(arr: T[], key: K): Array<{ id: T[K], arr:
 const getDepartmentsEmployees = async (ids: number[]): Promise<EmployeeList[]> => {
     const params = [...ids]
     const query = `
-        SELECT es.*, de.dept_no as dept_no
+        SELECT *, de.dept_no
         FROM employees es
         INNER JOIN dept_emp de ON de.emp_no = es.emp_no
-        WHERE de.dept_no IN [${ids.map(_ => '?').join(', ')}]
-        ORDER BY de.dept_no
+        WHERE de.to_date = '9999-01-01'
+          AND de.dept_no IN (${ids.map(_ => '?').join(', ')})
     `
     const employees = await queryData(query, params, mapEmloyee)
     const grouped = groupBy(employees, 'dept_no')
@@ -70,7 +70,7 @@ const getDepartmentsEmployees = async (ids: number[]): Promise<EmployeeList[]> =
 
 const getEmployeeByIds = async (ids: number[]): Promise<Employee[]> => {
     const list = ids.map(_ => '?').join(', ')
-    const query = `SELECT * FROM employees WHERE id IN [${list}]`
+    const query = `SELECT * FROM employees WHERE id IN (${list})`
     return await queryData<Employee>(query, ids, mapEmloyee)
 }
 
