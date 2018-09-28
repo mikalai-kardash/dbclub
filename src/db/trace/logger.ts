@@ -10,6 +10,9 @@ export interface ILogger {
 }
 
 export class ConsoleLogger implements ILogger {
+
+    constructor(private tag: string) { }
+
     public info(s: string) {
         this.write(`info: ${s}`)
     }
@@ -29,6 +32,6 @@ export class ConsoleLogger implements ILogger {
     }
 
     private write(s: string) {
-        log(`${timestamp()}: ${s}`)
+        log(`${timestamp()}/${this.tag}: ${s}`)
     }
 }

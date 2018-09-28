@@ -1,6 +1,7 @@
 import { differenceInMilliseconds, distanceInWordsStrict } from 'date-fns'
 import * as prettify from 'sql-formatter'
 import { format as sqlFormat } from 'sqlstring'
+import { v4 } from 'uuid'
 import { isDebug } from '../environment'
 import { AsyncQuery, Mapper, Query } from '../types'
 import { ConsoleLogger, ILogger } from './logger'
@@ -18,7 +19,7 @@ ${sql}
 `)
 }
 
-const logElapsedTime = (logger: ILogger, params: [Date]) => {
+const logElapsedTime = (logger: ILogger, params: [Date, string]) => {
     const [requested] = params
     const completed = new Date()
     const words = distanceInWordsStrict(completed, requested)
@@ -31,14 +32,20 @@ const logResults = <T>(logger: ILogger, results: T[]) => {
     logger.info(`Received ${r.length} records.`)
 }
 
+const getTag = () => {
+    const s = v4()
+    return s.substring(0, s.indexOf('-'))
+}
+
 export const createProxy = <T>(getDataAsync: AsyncQuery<T>): AsyncQuery<T> => {
     if (!isDebug()) {
         return getDataAsync
     }
 
-    const logger = new ConsoleLogger()
-
     return async (query: Query, mapper: Mapper<T>): Promise<T[]> => {
+        const tag = getTag()
+        const logger = new ConsoleLogger(tag)
+
         logSqlQuery(logger, [query.query, query.params])
 
         const requested = new Date()
@@ -46,7 +53,7 @@ export const createProxy = <T>(getDataAsync: AsyncQuery<T>): AsyncQuery<T> => {
         try {
 
             const result = await getDataAsync(query, mapper)
-            logResults(logger, result)
+            logResults(logger, [result])
             return result
 
         } catch (e) {
