@@ -1,7 +1,7 @@
+import { toQuery } from '../utils'
 import { AndCondition, Condition, OrCondition } from './conditions'
 import {
     ConditionType,
-    FieldNameMap,
     FieldType,
     Filter,
     FilterEq,
@@ -73,7 +73,7 @@ const createFilter = <T, F extends keyof T>(
 
         if (isFilterIn(value)) {
             const values = value.in
-            return new Condition(`${actualName} IN (${values.map(_ => '?').join(', ')})`, [
+            return new Condition(`${actualName} IN (${toQuery(values)})`, [
                 ...values as FieldType[],
             ])
         }

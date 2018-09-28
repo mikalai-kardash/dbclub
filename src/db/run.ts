@@ -20,6 +20,12 @@ const getDataAsync = async <T>(query: Query, mapper: Mapper<T>): Promise<T[]> =>
     return mapped
 }
 
-export const createQuery = <T>(): AsyncQuery<T> => {
+const createQuery = <T>(): AsyncQuery<T> => {
     return createProxy(getDataAsync)
+}
+
+export const runQuery = async <T>(query: Query, mapper: Mapper<T>): Promise<T[]> => {
+    const fn = createQuery<T>()
+    const result = await fn(query, mapper)
+    return result
 }

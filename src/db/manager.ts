@@ -1,6 +1,6 @@
-import { queryData } from './config'
 import { mapManager } from './mappers'
 import { Manager } from './models'
+import { runQuery } from './run'
 
 const getDepartmentManagers = async (dept_no: number): Promise<Manager[]> => {
     const query = `
@@ -10,7 +10,7 @@ const getDepartmentManagers = async (dept_no: number): Promise<Manager[]> => {
         ORDER BY dm.to_date DESC
     `
     const params = [dept_no]
-    return await queryData<Manager>(query, params, mapManager)
+    return await runQuery({ query, params }, mapManager)
 }
 
 export {

@@ -1,10 +1,11 @@
-import { queryData } from './config'
 import { mapEmloyee } from './mappers'
 import { Employee } from './models'
+import { runQuery } from './run'
+import { toQuery } from './utils'
 
 const getEmployee = async (): Promise<Employee> => {
     const query = 'select * from employees limit 1'
-    return await queryData<Employee>(query, [], mapEmloyee)[0]
+    return (await runQuery<Employee>({ query }, mapEmloyee))[0]
 }
 
 const getDepartmentEmployees = async (dept_no: number): Promise<Employee[]> => {
@@ -16,7 +17,7 @@ const getDepartmentEmployees = async (dept_no: number): Promise<Employee[]> => {
         LIMIT 128
     `
     const params = [dept_no]
-    return await queryData<Employee>(query, params, mapEmloyee)
+    return await runQuery({ query, params }, mapEmloyee)
 }
 
 export interface EmployeeList {
@@ -57,10 +58,10 @@ const getDepartmentsEmployees = async (ids: number[]): Promise<EmployeeList[]> =
         FROM employees es
         INNER JOIN dept_emp de ON de.emp_no = es.emp_no
         WHERE de.to_date = DATE('9999-01-01')
-          AND de.dept_no IN (${ids.map(_ => '?').join(', ')})
+          AND de.dept_no IN (${toQuery(ids)})
         LIMIT 256
     `
-    const employees = await queryData(query, params, mapEmloyee)
+    const employees = await runQuery({ query, params }, mapEmloyee)
     const grouped = groupBy(employees, 'dept_no')
 
     return grouped.map(g => ({
@@ -70,9 +71,9 @@ const getDepartmentsEmployees = async (ids: number[]): Promise<EmployeeList[]> =
 }
 
 const getEmployeeByIds = async (ids: number[]): Promise<Employee[]> => {
-    const list = ids.map(_ => '?').join(', ')
+    const list = toQuery(ids)
     const query = `SELECT * FROM employees WHERE id IN (${list})`
-    return await queryData<Employee>(query, ids, mapEmloyee)
+    return await runQuery<Employee>({ query, params: ids }, mapEmloyee)
 }
 
 export {
