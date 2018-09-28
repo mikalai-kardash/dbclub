@@ -17,7 +17,7 @@ input FilterIntInput {
     not_null: Boolean
 }
 
-type FilterString {
+input FilterStringInput {
     eq: String
     like: String
 }

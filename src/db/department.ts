@@ -15,12 +15,6 @@ const queryDepartments = async (query: string, params: any[]) => {
     return await runQuery({ query, params }, mapDepartment)
 }
 
-const getDepartmentById = async (dept_no: number): Promise<Department[]> => {
-    const query = 'SELECT * FROM departments WHERE dept_no = ?'
-    const params = [dept_no]
-    return await queryDepartments(query, params)
-}
-
 const getDepartments = async (filter: Query<DepartmentSchema>): Promise<Department[]> => {
     let query = `
         SELECT *
@@ -47,7 +41,6 @@ const getDepartments = async (filter: Query<DepartmentSchema>): Promise<Departme
 }
 
 export {
-    getDepartmentById,
     queryDepartments,
     getDepartments,
 }

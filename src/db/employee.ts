@@ -1,12 +1,7 @@
 import { mapEmloyee } from './mappers'
 import { Employee } from './models'
 import { runQuery } from './run'
-import { toQuery } from './utils'
-
-const getEmployee = async (): Promise<Employee> => {
-    const query = 'select * from employees limit 1'
-    return (await runQuery<Employee>({ query }, mapEmloyee))[0]
-}
+import { groupBy, toQuery } from './utils'
 
 const getDepartmentEmployees = async (dept_no: number): Promise<Employee[]> => {
     const query = `
@@ -23,32 +18,6 @@ const getDepartmentEmployees = async (dept_no: number): Promise<Employee[]> => {
 export interface EmployeeList {
     dept_no: number,
     employees: Employee[],
-}
-
-const groupBy = <T, K extends keyof T>(arr: T[], key: K): Array<{ id: T[K], arr: T[] }> => {
-    interface ReturnType { id: T[K], arr: T[] }
-
-    const map = new Map<T[K], T[]>()
-
-    arr.forEach(item => {
-        const id = item[key]
-        if (!id) { return }
-
-        const group = map.get(id) || []
-        if (group.length === 0) {
-            map.set(id, group)
-        }
-
-        group.push(item)
-    })
-
-    const result: ReturnType[] = []
-
-    for (const [id, values] of map) {
-        result.push({ id, arr: values })
-    }
-
-    return result
 }
 
 const getDepartmentsEmployees = async (ids: number[]): Promise<EmployeeList[]> => {
@@ -77,7 +46,6 @@ const getEmployeeByIds = async (ids: number[]): Promise<Employee[]> => {
 }
 
 export {
-    getEmployee,
     getDepartmentEmployees,
     getEmployeeByIds,
     getDepartmentsEmployees,
