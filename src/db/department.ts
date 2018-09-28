@@ -1,8 +1,8 @@
 import { Department as DepartmentSchema } from '../schema/models'
-import { queryData } from './config'
 import { Department } from './models'
 import { QueryBuilder } from './query/builder'
 import { FieldNameMap, Query } from './query/models'
+import { createQuery } from './run'
 
 const mapDepartment = (record: any): Department => {
     return {
@@ -12,7 +12,8 @@ const mapDepartment = (record: any): Department => {
 }
 
 const queryDepartments = async (query: string, params: any[]) => {
-    return await queryData<Department>(query, params, mapDepartment)
+    const queryFn = createQuery<Department>()
+    return await queryFn({ query, params }, mapDepartment)
 }
 
 const getDepartmentById = async (dept_no: number): Promise<Department[]> => {
