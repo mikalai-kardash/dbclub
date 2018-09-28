@@ -1,4 +1,4 @@
-import { Query } from '../db/query/models'
+import { Query } from 'db/query/models'
 import { Department } from './models'
 import { Context } from './server'
 
