@@ -10,7 +10,7 @@ type Gender =
     'FEMALE'
 
 export interface SchemaType {
-    __typeName: TypeNames
+    __typeName?: TypeNames
 }
 
 export interface Employee extends SchemaType {
