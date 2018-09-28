@@ -1,7 +1,7 @@
 import { getDepartmentManagers } from '../db/manager'
-import { Context } from '../server'
 import { mapEmployees, mapManager } from './mappers'
 import { Department, Employee, Manager } from './models'
+import { Context } from './server'
 
 const resolveManager = async (parent: Department): Promise<Manager> => {
     const [manager] = await getDepartmentManagers(parent.id)

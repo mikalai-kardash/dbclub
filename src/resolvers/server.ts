@@ -1,8 +1,8 @@
-import { DepartmentsApiSpec } from './api/department'
-import { EmployeeApiSpec } from './api/employee'
-import { SalaryApiSpec } from './api/salary'
-import { TitleApiSpec } from './api/title'
-import { Cache } from './optimizations/cache'
+import { DepartmentsApiSpec } from 'api/department'
+import { EmployeeApiSpec } from 'api/employee'
+import { SalaryApiSpec } from 'api/salary'
+import { TitleApiSpec } from 'api/title'
+import { Cache } from 'optimizations/cache'
 
 export interface Context {
     api: {

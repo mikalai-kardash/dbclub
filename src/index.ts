@@ -8,8 +8,8 @@ import { DepartmentSource } from './db/department.source'
 import { DefaultCache } from './optimizations/cache'
 import { Memory } from './optimizations/memory'
 import resolvers from './resolvers/resolvers'
+import { Context } from './resolvers/server'
 import { definitions, kind } from './schema/db.graphql'
-import { Context } from './server'
 
 environment.config()
 
