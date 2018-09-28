@@ -1,7 +1,7 @@
 import { getSalaryForEmployee } from '../db/salary'
 import { getEmployeeTitle } from '../db/title'
-import { Manager, Salary, Title } from '../schema/models'
 import { mapSalary, mapTitle } from './mappers'
+import { Manager, Salary, Title } from './models'
 
 const resolveTitle = async (parent: Manager): Promise<Title> => {
     const [title] = await getEmployeeTitle(parent.id)

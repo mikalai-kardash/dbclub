@@ -1,4 +1,4 @@
-import { Department as DepartmentSchema } from '../schema/models'
+import { Department as DepartmentSchema } from '../resolvers/models'
 import { Department } from './models'
 import { QueryBuilder } from './query/builder'
 import { FieldNameMap, Query } from './query/models'

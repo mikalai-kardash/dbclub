@@ -1,5 +1,5 @@
 import { Query } from '../db/query/models'
-import { Department, Employee, Salary, Title } from '../schema/models'
+import { Department, Employee, Salary, Title } from '../resolvers/models'
 
 export interface DepartmentsSource {
     getDepartments(filters?: Query<Department>): Promise<Department[]>

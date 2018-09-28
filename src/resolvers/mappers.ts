@@ -11,7 +11,7 @@ import {
     Manager as SchemaManager,
     Salary as SchemaSalary,
     Title as SchemaTitle,
-} from '../schema/models'
+} from './models'
 
 export const mapEmployees = (data: DataEmployee): SchemaEmployee => {
     const gender = data.gender === 'M' ? 'MALE' : 'FEMALE'

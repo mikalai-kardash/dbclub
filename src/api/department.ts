@@ -1,6 +1,6 @@
 import { Query } from '../db/query/models'
 import { Memory } from '../optimizations/memory'
-import { Department } from '../schema/models'
+import { Department } from '../resolvers/models'
 import { ApiOf } from './models'
 import { DepartmentsSource } from './source'
 

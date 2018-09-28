@@ -7,10 +7,7 @@ import { TitleApi } from './api/title'
 import { DepartmentSource } from './db/department.source'
 import { DefaultCache } from './optimizations/cache'
 import { Memory } from './optimizations/memory'
-import Department from './resolvers/Department'
-import Employee from './resolvers/Employee'
-import Manager from './resolvers/Manager'
-import Query from './resolvers/Query'
+import resolvers from './resolvers/resolvers'
 import { definitions, kind } from './schema/db.graphql'
 import { Context } from './server'
 
@@ -18,12 +15,7 @@ environment.config()
 
 const server = new ApolloServer({
     typeDefs: { kind, definitions },
-    resolvers: {
-        Query,
-        Department,
-        Employee,
-        Manager,
-    },
+    resolvers,
     context: () => {
         const data = new DefaultCache()
         const func = new DefaultCache()

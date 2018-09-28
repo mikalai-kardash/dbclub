@@ -1,5 +1,5 @@
-import { Employee } from '../schema/models'
 import { Context } from '../server'
+import { Employee } from './models'
 
 const resolveTitle = async (parent: Employee, _: any, context: Context): Promise<string> => {
     const { title } = await context.api.titles.getTitleByEmployeeId(parent.id)
