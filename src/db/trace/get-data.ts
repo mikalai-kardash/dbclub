@@ -19,7 +19,7 @@ ${sql}
 `)
 }
 
-const logElapsedTime = (logger: ILogger, params: [Date, string]) => {
+const logElapsedTime = (logger: ILogger, params: [Date]) => {
     const [requested] = params
     const completed = new Date()
     const words = distanceInWordsStrict(completed, requested)
@@ -53,7 +53,7 @@ export const createProxy = <T>(getDataAsync: AsyncQuery<T>): AsyncQuery<T> => {
         try {
 
             const result = await getDataAsync(query, mapper)
-            logResults(logger, [result])
+            logResults(logger, result)
             return result
 
         } catch (e) {
